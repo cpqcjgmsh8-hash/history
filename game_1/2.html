@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秦汉时期</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .events-column, .years-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .column-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        
+        .card {
+            height: 80px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card.matched .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            font-size: 1.2rem;
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            transform: rotateY(180deg);
+            font-size: 0.9rem;
+        }
+        
+        .event-card .card-back {
+            background: linear-gradient(135deg, #16a085, #27ae60);
+        }
+        
+        .year-card .card-back {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .event-desc {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .event-year {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .difficulty-selector {
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .difficulty-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result h2 {
+            margin-bottom: 15px;
+        }
+        
+        .result-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: #2ecc71;
+        }
+        
+        .failure {
+            color: #e74c3c;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* 成功弹窗样式 */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .success-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .success-modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #2ecc71;
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .modal-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .modal-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .modal-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fdbb2d;
+        }
+        
+        .modal-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .modal-btn.continue {
+            background: #2ecc71;
+        }
+        
+        .modal-btn.continue:hover {
+            background: #27ae60;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.8rem;
+            }
+            
+            .home-btn {
+                position: relative;
+                margin-bottom: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                height: 70px;
+            }
+            
+            .modal-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="home-btn" onclick="window.location.href='index.html'">
+                <span>←</span> 返回首页
+            </button>
+            <h1>秦汉时期</h1>
+            <p class="subtitle">匹配历史事件与对应的发生年份</p>
+        </header>
+        
+        <div class="game-info">
+            <div class="info-item">
+                <span class="info-label">得分</span>
+                <span class="info-value" id="score">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">时间</span>
+                <span class="info-value" id="timer">90</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">关卡</span>
+                <span class="info-value" id="level">1</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">进度</span>
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="difficulty-selector">
+            <button class="difficulty-btn active" data-difficulty="easy">简单 (4对)</button>
+            <button class="difficulty-btn" data-difficulty="medium">中等 (6对)</button>
+            <button class="difficulty-btn" data-difficulty="hard">困难 (8对)</button>
+        </div>
+        
+        <div class="game-area">
+            <div class="events-column">
+                <div class="column-title">历史事件</div>
+                <div id="eventsContainer">
+                    <!-- 事件卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="years-column">
+                <div class="column-title">发生年份</div>
+                <div id="yearsContainer">
+                    <!-- 年份卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn">开始游戏</button>
+            <button id="resetBtn" disabled>重新开始</button>
+            <button id="hintBtn" disabled>提示</button>
+        </div>
+        
+        <div class="result" id="result">
+            <h2>游戏结束</h2>
+            <div class="result-stats">
+                <div class="info-item">
+                    <span class="info-label">最终得分</span>
+                    <span class="info-value" id="finalScore">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">通过关卡</span>
+                    <span class="info-value" id="finalLevel">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">正确匹配</span>
+                    <span class="info-value" id="correctMatches">0</span>
+                </div>
+            </div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <!-- 成功弹窗 -->
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">🎉</div>
+            <h2 class="modal-title">恭喜过关！</h2>
+            <p class="modal-message">你成功匹配了所有历史事件与年份</p>
+            
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="modalScore">0</div>
+                    <div class="modal-stat-label">得分</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="modalLevel">1</div>
+                    <div class="modal-stat-label">关卡</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="modalTime">0</div>
+                    <div class="modal-stat-label">剩余时间</div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn continue" id="continueBtn">继续游戏</button>
+                <button class="modal-btn" id="restartBtn">重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 历史事件数据
+        const historyEvents = [
+            { year: "公元前221年", description: "秦始皇统一六国，建立秦朝" },
+            { year: "公元前209年", description: "陈胜吴广起义" },
+            { year: "公元前202年", description: "刘邦建立汉朝，史称西汉" },
+            { year: "公元前119年", description: "汉武帝发起漠北战役" },
+            { year: "9年", description: "西汉灭亡" },
+            { year: "25年", description: "刘秀称帝，史称东汉" },
+            { year: "184年", description: "黄巾起义" },
+            { year: "公元前138年", description: "张骞首次出使西域" },
+            { year: "公元前119年", description: "张骞第二次出使西域" },
+            { year: "73年", description: "班超出使西域" },
+            { year: "105年", description: "蔡伦发明造纸术" }
+          
+        ];
+
+        // 游戏状态变量
+        let score = 0;
+        let timeLeft = 90;
+        let level = 1;
+        let timer;
+        let gameStarted = false;
+        let selectedEvent = null;
+        let selectedYear = null;
+        let matchedPairs = 0;
+        let totalPairs = 0;
+        let currentDifficulty = 'easy';
+        let eventsInPlay = [];
+        let hintsUsed = 0;
+        let correctMatches = 0;
+
+        // DOM元素
+        const eventsContainer = document.getElementById('eventsContainer');
+        const yearsContainer = document.getElementById('yearsContainer');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const levelElement = document.getElementById('level');
+        const progressElement = document.getElementById('progress');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const resultElement = document.getElementById('result');
+        const finalScoreElement = document.getElementById('finalScore');
+        const finalLevelElement = document.getElementById('finalLevel');
+        const correctMatchesElement = document.getElementById('correctMatches');
+        const feedbackElement = document.getElementById('feedback');
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+        
+        // 成功弹窗元素
+        const successModal = document.getElementById('successModal');
+        const modalScore = document.getElementById('modalScore');
+        const modalLevel = document.getElementById('modalLevel');
+        const modalTime = document.getElementById('modalTime');
+        const continueBtn = document.getElementById('continueBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // 初始化游戏
+        function initGame() {
+            eventsContainer.innerHTML = '';
+            yearsContainer.innerHTML = '';
+            score = 0;
+            timeLeft = 90;
+            level = 1;
+            matchedPairs = 0;
+            correctMatches = 0;
+            hintsUsed = 0;
+            gameStarted = false;
+            selectedEvent = null;
+            selectedYear = null;
+            
+            scoreElement.textContent = score;
+            timerElement.textContent = timeLeft;
+            levelElement.textContent = level;
+            progressElement.style.width = '0%';
+            
+            startBtn.disabled = false;
+            resetBtn.disabled = true;
+            hintBtn.disabled = true;
+            resultElement.style.display = 'none';
+            successModal.classList.remove('active');
+            
+            // 根据难度选择事件数量
+            let eventCount = 4;
+            if (currentDifficulty === 'medium') eventCount = 6;
+            if (currentDifficulty === 'hard') eventCount = 8;
+            
+            totalPairs = eventCount;
+            
+            // 随机选择事件
+            eventsInPlay = [...historyEvents]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, eventCount);
+            
+            // 创建事件卡片
+            eventsInPlay.forEach((event, index) => {
+                const card = document.createElement('div');
+                card.className = 'card event-card';
+                card.dataset.index = index;
+                card.dataset.year = event.year;
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">历史事件 ${index + 1}</div>
+                        <div class="card-back">
+                            <div class="event-desc">${event.description}</div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => selectEvent(card));
+                eventsContainer.appendChild(card);
+            });
+            
+            // 创建年份卡片（打乱顺序）
+            const shuffledYears = [...eventsInPlay]
+                .map(event => event.year)
+                .sort(() => 0.5 - Math.random());
+            
+            shuffledYears.forEach((year, index) => {
+                const card = document.createElement('div');
+                card.className = 'card year-card';
+                card.dataset.index = index;
+                card.dataset.year = year;
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">?</div>
+                        <div class="card-back">
+                            <div class="event-year">${year}</div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => selectYear(card));
+                yearsContainer.appendChild(card);
+            });
+        }
+
+        // 选择事件卡片
+        function selectEvent(card) {
+            if (!gameStarted || card.classList.contains('matched')) {
+                return;
+            }
+            
+            // 如果已经选择了一个事件，先取消选择
+            if (selectedEvent) {
+                selectedEvent.classList.remove('flipped');
+                selectedEvent = null;
+            }
+            
+            card.classList.add('flipped');
+            selectedEvent = card;
+            
+            // 如果已经选择了一个年份，检查匹配
+            if (selectedYear) {
+                checkMatch();
+            }
+        }
+
+        // 选择年份卡片
+        function selectYear(card) {
+            if (!gameStarted || card.classList.contains('matched')) {
+                return;
+            }
+            
+            // 如果已经选择了一个年份，先取消选择
+            if (selectedYear) {
+                selectedYear.classList.remove('flipped');
+                selectedYear = null;
+            }
+            
+            card.classList.add('flipped');
+            selectedYear = card;
+            
+            // 如果已经选择了一个事件，检查匹配
+            if (selectedEvent) {
+                checkMatch();
+            }
+        }
+
+        // 检查匹配
+        function checkMatch() {
+            if (selectedEvent && selectedYear) {
+                const eventYear = selectedEvent.dataset.year;
+                const year = selectedYear.dataset.year;
+                
+                if (eventYear === year) {
+                    // 匹配成功
+                    setTimeout(() => {
+                        selectedEvent.classList.add('matched');
+                        selectedYear.classList.add('matched');
+                        
+                        // 增加分数
+                        score += 20;
+                        scoreElement.textContent = score;
+                        
+                        matchedPairs++;
+                        correctMatches++;
+                        
+                        // 更新进度条
+                        progressElement.style.width = `${(matchedPairs / totalPairs) * 100}%`;
+                        
+                        // 检查是否完成当前关卡
+                        if (matchedPairs === totalPairs) {
+                            showSuccessModal();
+                        }
+                        
+                        resetSelection();
+                    }, 500);
+                } else {
+                    // 匹配失败
+                    setTimeout(() => {
+                        selectedEvent.classList.remove('flipped');
+                        selectedYear.classList.remove('flipped');
+                        
+                        // 扣分
+                        score = Math.max(0, score - 5);
+                        scoreElement.textContent = score;
+                        
+                        resetSelection();
+                    }, 1000);
+                }
+            }
+        }
+
+        // 重置选择
+        function resetSelection() {
+            selectedEvent = null;
+            selectedYear = null;
+        }
+
+        // 显示成功弹窗
+        function showSuccessModal() {
+            // 暂停游戏计时器
+            clearInterval(timer);
+            
+            // 更新弹窗内容
+            modalScore.textContent = score;
+            modalLevel.textContent = level;
+            modalTime.textContent = timeLeft;
+            
+            // 显示弹窗
+            successModal.classList.add('active');
+        }
+
+        // 继续游戏（进入下一关）
+        function continueGame() {
+            successModal.classList.remove('active');
+            levelUp();
+        }
+
+        // 提供提示
+        function provideHint() {
+            if (!gameStarted || hintsUsed >= 3) {
+                return;
+            }
+            
+            // 找到第一个未匹配的事件
+            const unmatchedEvents = Array.from(eventsContainer.children)
+                .filter(card => !card.classList.contains('matched'));
+            
+            const unmatchedYears = Array.from(yearsContainer.children)
+                .filter(card => !card.classList.contains('matched'));
+            
+            if (unmatchedEvents.length > 0 && unmatchedYears.length > 0) {
+                // 随机选择一个未匹配的事件和对应的年份
+                const randomEvent = unmatchedEvents[0];
+                const correctYear = randomEvent.dataset.year;
+                const correctYearCard = unmatchedYears.find(card => card.dataset.year === correctYear);
+                
+                // 短暂显示匹配
+                randomEvent.classList.add('flipped');
+                correctYearCard.classList.add('flipped');
+                
+                setTimeout(() => {
+                    randomEvent.classList.remove('flipped');
+                    correctYearCard.classList.remove('flipped');
+                }, 1500);
+                
+                // 扣分
+                score = Math.max(0, score - 10);
+                scoreElement.textContent = score;
+                
+                hintsUsed++;
+            }
+        }
+
+        // 升级关卡
+        function levelUp() {
+            level++;
+            levelElement.textContent = level;
+            
+            // 增加时间奖励
+            timeLeft += 20;
+            timerElement.textContent = timeLeft;
+            
+            // 短暂显示成功消息
+            feedbackElement.textContent = `恭喜！通过第${level-1}关！`;
+            feedbackElement.className = 'feedback success';
+            feedbackElement.style.display = 'block';
+            
+            setTimeout(() => {
+                feedbackElement.style.display = 'none';
+                // 进入下一关
+                initLevel();
+            }, 2000);
+        }
+
+        // 初始化关卡
+        function initLevel() {
+            eventsContainer.innerHTML = '';
+            yearsContainer.innerHTML = '';
+            matchedPairs = 0;
+            progressElement.style.width = '0%';
+            
+            // 根据难度和关卡增加事件数量
+            let baseEventCount = 4;
+            if (currentDifficulty === 'medium') baseEventCount = 6;
+            if (currentDifficulty === 'hard') baseEventCount = 8;
+            
+            const eventCount = Math.min(baseEventCount + Math.floor(level / 2), historyEvents.length);
+            totalPairs = eventCount;
+            
+            // 随机选择事件
+            eventsInPlay = [...historyEvents]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, eventCount);
+            
+            // 创建事件卡片
+            eventsInPlay.forEach((event, index) => {
+                const card = document.createElement('div');
+                card.className = 'card event-card';
+                card.dataset.index = index;
+                card.dataset.year = event.year;
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">历史事件 ${index + 1}</div>
+                        <div class="card-back">
+                            <div class="event-desc">${event.description}</div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => selectEvent(card));
+                eventsContainer.appendChild(card);
+            });
+            
+            // 创建年份卡片（打乱顺序）
+            const shuffledYears = [...eventsInPlay]
+                .map(event => event.year)
+                .sort(() => 0.5 - Math.random());
+            
+            shuffledYears.forEach((year, index) => {
+                const card = document.createElement('div');
+                card.className = 'card year-card';
+                card.dataset.index = index;
+                card.dataset.year = year;
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">?</div>
+                        <div class="card-back">
+                            <div class="event-year">${year}</div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => selectYear(card));
+                yearsContainer.appendChild(card);
+            });
+            
+            // 恢复计时器
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // 开始游戏
+        function startGame() {
+            if (gameStarted) return;
+            
+            gameStarted = true;
+            startBtn.disabled = true;
+            resetBtn.disabled = false;
+            hintBtn.disabled = false;
+            
+            // 启动计时器
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // 结束游戏
+        function endGame() {
+            clearInterval(timer);
+            gameStarted = false;
+            
+            finalScoreElement.textContent = score;
+            finalLevelElement.textContent = level - 1;
+            correctMatchesElement.textContent = correctMatches;
+            
+            // 根据得分给出反馈
+            if (score >= 200) {
+                feedbackElement.textContent = "太棒了！你是历史时间线大师！";
+                feedbackElement.className = 'feedback success';
+            } else if (score >= 100) {
+                feedbackElement.textContent = "不错！你的历史知识很扎实！";
+                feedbackElement.className = 'feedback success';
+            } else if (score >= 50) {
+                feedbackElement.textContent = "还可以，继续努力！";
+                feedbackElement.className = 'feedback';
+            } else {
+                feedbackElement.textContent = "需要多学习历史知识哦！";
+                feedbackElement.className = 'feedback failure';
+            }
+            
+            resultElement.style.display = 'block';
+        }
+
+        // 重置游戏
+        function resetGame() {
+            clearInterval(timer);
+            initGame();
+        }
+
+        // 设置难度
+        function setDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            
+            difficultyButtons.forEach(btn => {
+                if (btn.dataset.difficulty === difficulty) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            if (!gameStarted) {
+                initGame();
+            }
+        }
+
+        // 事件监听
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', resetGame);
+        hintBtn.addEventListener('click', provideHint);
+        continueBtn.addEventListener('click', continueGame);
+        restartBtn.addEventListener('click', resetGame);
+
+        difficultyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setDifficulty(btn.dataset.difficulty);
+            });
+        });
+
+        // 初始化游戏
+        initGame();
+    </script>
+</body>
+</html>
